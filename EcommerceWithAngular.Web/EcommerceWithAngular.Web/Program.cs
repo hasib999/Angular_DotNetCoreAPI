@@ -1,4 +1,4 @@
-using CardsAPI.Data;
+using EcommerceWithAngular.Web.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,29 +10,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Inject Dbcontext
-builder.Services.AddDbContext<CardsDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("CardsDbConnectionString")));
-
-builder.Services.AddCors((setup) =>
-{
-    setup.AddPolicy("default", (options) =>
-    {
-        options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
-    });
-});
-
-
 var app = builder.Build();
-
+builder.Services.AddDbContext<ApplicationDbContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseCors("default");
 
 app.UseHttpsRedirection();
 
